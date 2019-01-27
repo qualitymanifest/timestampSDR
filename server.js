@@ -4,7 +4,7 @@ const wav = require("wav");
 const moment = require("moment");
 const gar = require("gar");
 
-const server = dgram.createSocket("udp4", false, false, 1500);
+const server = dgram.createSocket("udp4");
 
 let currFileNum = 1;
 let timeoutRunning = false;
@@ -42,12 +42,11 @@ function handleTimeout() {
 			console.log("File shorter than minimum duration specified, deleting");
 			fs.unlink(filename, function(err) {
 			});
-			return createFileWriter();
+			return;
 		}
 		console.log(`Recording #${currFileNum} saved`)
 		if (currFileNum < maxFiles) {
 			currFileNum++;
-			createFileWriter();
 		}
 		else {
 			server.close();
@@ -68,8 +67,7 @@ function cancelTimeout() {
 function handleArgs() {
 	const args = gar(process.argv.slice(2));
 	// timeout specified in minutes, convert to seconds, 1 second default
-	console.log(args)
-	timeout = args.timeout ? args.timeout * 1000 : 1000;
+	timeout = args.timeout ? args.timeout * 1000 : 5000;
 	maxFiles = args.maxfiles ? args.maxfiles : 5;
 	minDuration = args.minduration ? args.minduration : null;
 	host = args.host ? args.host : "127.0.0.1";
@@ -81,19 +79,19 @@ handleArgs();
 server.on('listening', function () {
     const address = server.address();
     console.log('UDP Server listening on ' + address.address + ":" + address.port);
-    createFileWriter();
 });
 
 server.on('message', function (message, remote) {
     const readableMessage = message.readInt16LE();
 
     if (readableMessage !== 0) {
-    	fileWriter.write(message);
-    	timeoutRunning ? cancelTimeout() : null;
     	if (currFileEmpty) {
+    		createFileWriter();
     		fileStartTime = moment();
     		currFileEmpty = false;
     	}
+    	fileWriter.write(message);
+    	timeoutRunning ? cancelTimeout() : null;
     }
     // Don't start multiple timeouts
     // Don't start a timeout if the file doesn't have anything written to it yet
