@@ -9,7 +9,8 @@ const server = dgram.createSocket("udp4");
 let currFileNum = 1;
 let timeoutRunning = false;
 let currFileEmpty = true;
-let fileStartTime;
+let timeElapsed = 0;
+let recordStartTime;
 let timeoutID;
 let fileWriter;
 let fileName;
@@ -36,10 +37,12 @@ function createFileWriter() {
 
 function handleTimeout() {
 	fileWriter.end(function() {
+		let timeElapsedSeconds = timeElapsed / 1000;
+		// Reset timeElapsed regardless of what happens since we stored the necessary value in timeElapsedSeconds
+		timeElapsed = 0;
 		currFileEmpty = true;
-		if (minDuration && moment().diff(fileStartTime, "seconds") < minDuration) {
-			// File is shorter than minimum duration, delete
-			console.log("File shorter than minimum duration specified, deleting");
+		if (minDuration && timeElapsedSeconds < minDuration) {
+			console.log(`Recording time shorter than minduration specified (${timeElapsedSeconds}/${minDuration}s), deleting`);
 			fs.unlink(filename, function(err) {
 			});
 			return;
@@ -56,6 +59,7 @@ function handleTimeout() {
 
 function startTimeout(timeout) {
 	timeoutRunning = true;
+	timeElapsed += Date.now() - recordStartTime;
 	timeoutID = setTimeout(handleTimeout, timeout);
 }
 
@@ -66,10 +70,10 @@ function cancelTimeout() {
 
 function handleArgs() {
 	const args = gar(process.argv.slice(2));
-	// timeout specified in minutes, convert to seconds, 1 second default
+	// timeout specified in minutes, convert to seconds
 	timeout = args.timeout ? args.timeout * 1000 : 5000;
 	maxFiles = args.maxfiles ? args.maxfiles : 5;
-	minDuration = args.minduration ? args.minduration : null;
+	minDuration = args.minduration ? args.minduration : 5;
 	host = args.host ? args.host : "127.0.0.1";
 	port = args.port ? args.port : 7355;
 }
@@ -85,13 +89,17 @@ server.on('message', function (message, remote) {
     const readableMessage = message.readInt16LE();
 
     if (readableMessage !== 0) {
+    	if (currFileEmpty || timeoutRunning) {
+    		recordStartTime = Date.now();
+    	}
     	if (currFileEmpty) {
     		createFileWriter();
-    		fileStartTime = moment();
     		currFileEmpty = false;
     	}
+    	if (timeoutRunning) {
+    		cancelTimeout();
+    	}
     	fileWriter.write(message);
-    	timeoutRunning ? cancelTimeout() : null;
     }
     // Don't start multiple timeouts
     // Don't start a timeout if the file doesn't have anything written to it yet
