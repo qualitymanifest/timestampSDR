@@ -7,9 +7,9 @@ const gar = require("gar");
 const server = dgram.createSocket("udp4");
 
 let currFileNum = 1;
-let timeoutRunning = false;
 let currFileEmpty = true;
-let timeElapsed = 0;
+let timeoutRunning = false;
+let millisElapsed = 0;
 let recordStartTime;
 let timeoutID;
 let fileWriter;
@@ -21,33 +21,32 @@ let maxFiles;
 let port;
 let host;
 
-function createFileWriter() {
+
+const createFileWriter = () => {
 	const date = moment().format("MMM-DD-YYYY_HH:mm:ss");
 	const directory = process.platform === "win32" ? "recordings\\" : "recordings/"
 	filename = `${directory}${date}.wav`;
-	console.log(`Starting recording #${currFileNum} of ${maxFiles}, filename: ${filename}`);
-
+	console.log(` * Starting recording #${currFileNum} of ${maxFiles}, filename: ${filename}`);
 	fileWriter = new wav.FileWriter(filename, {
 		channels: 1,
 		sampleRate: 48000,
 		bitDepth: 16
 	});
-
 }
 
-function handleTimeout() {
-	fileWriter.end(function() {
-		let timeElapsedSeconds = timeElapsed / 1000;
-		// Reset timeElapsed regardless of what happens since we stored the necessary value in timeElapsedSeconds
-		timeElapsed = 0;
+const handleTimeout = () => {
+	fileWriter.end(() => {
+		let secondsElapsedTotal = millisElapsed / 1000;
+		// Reset millisElapsed regardless of what happens since we stored the necessary value in secondsElapsedTotal
+		millisElapsed = 0;
 		currFileEmpty = true;
-		if (minDuration && timeElapsedSeconds < minDuration) {
-			console.log(`Recording time shorter than minduration specified (${timeElapsedSeconds}/${minDuration}s), deleting`);
-			fs.unlink(filename, function(err) {
+		if (minDuration && secondsElapsedTotal < minDuration) {
+			console.log(`   -- Recording time shorter than minduration specified (${secondsElapsedTotal}/${minDuration}s), deleting`);
+			fs.unlink(filename, err => {
 			});
 			return;
 		}
-		console.log(`Recording #${currFileNum} saved`)
+		console.log(`   ++ Recording #${currFileNum} saved`)
 		if (currFileNum < maxFiles) {
 			currFileNum++;
 		}
@@ -57,18 +56,18 @@ function handleTimeout() {
 	});
 }
 
-function startTimeout(timeout) {
+const startTimeout = () => {
 	timeoutRunning = true;
-	timeElapsed += Date.now() - recordStartTime;
+	millisElapsed += Date.now() - recordStartTime;
 	timeoutID = setTimeout(handleTimeout, timeout);
 }
 
-function cancelTimeout() {
+const cancelTimeout = () => {
 	timeoutRunning = false;
 	clearTimeout(timeoutID);
 }
 
-function handleArgs() {
+const handleArgs = () => {
 	const args = gar(process.argv.slice(2));
 	// timeout specified in minutes, convert to seconds
 	timeout = args.timeout ? args.timeout * 1000 : 5000;
@@ -80,12 +79,12 @@ function handleArgs() {
 
 handleArgs();
 
-server.on('listening', function () {
+server.on('listening', () => {
     const address = server.address();
     console.log('UDP Server listening on ' + address.address + ":" + address.port);
 });
 
-server.on('message', function (message, remote) {
+server.on('message', (message, remote) => {
     const readableMessage = message.readInt16LE();
 
     if (readableMessage !== 0) {
@@ -104,7 +103,7 @@ server.on('message', function (message, remote) {
     // Don't start multiple timeouts
     // Don't start a timeout if the file doesn't have anything written to it yet
     else if (!timeoutRunning && !currFileEmpty) {
-    	startTimeout(timeout);
+    	startTimeout();
     }
 
 });
