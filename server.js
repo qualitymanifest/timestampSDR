@@ -1,5 +1,6 @@
 const fs = require("fs");
 const dgram = require("dgram");
+const { green, yellow } = require("colors/safe");
 const handleArgs = require("./imports/handle_args");
 const createFile = require("./imports/create_file");
 
@@ -25,12 +26,12 @@ const handleTimeout = () => {
 	file.writer.end(() => {
 		const secondsElapsedTotal = file.millisElapsed / 1000;
 		if (args.minDuration && secondsElapsedTotal < args.minDuration) {
-			console.log(`   -- Recording time shorter than minduration specified (${secondsElapsedTotal}/${args.minDuration}s), deleting`);
+			console.log(yellow(`   -- Recording time shorter than MINDURATION (${secondsElapsedTotal}/${args.minDuration}s), deleting`));
 			fs.unlink(file.name, err => {
 			});
 		}
 		else {
-			console.log(`   ++ Recording #${currFileNum} saved`)
+			console.log(green(`   ++ Recording #${currFileNum} saved`));
 			if (currFileNum < args.maxFiles) {
 				currFileNum++;
 			}

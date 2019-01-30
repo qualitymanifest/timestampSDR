@@ -13,22 +13,23 @@ Work in progress! I have only tested it on Linux with GQRX, so, instructions are
 
 ```
 node server.js [options]
---timeout=<number>      Maximum seconds of silence before saving file and starting new file or exiting, DEFAULT: 5
---minduration=<number>  After timeout finishes, if total recording was less than minduration seconds, file is deleted. DEFAULT: 5
---maxfiles=<number>     Maximum number of files to save before exiting, DEFAULT: 5
---host=<string>         Local IP address serving data, DEFAULT: 127.0.0.1 (localhost)
---port=<number>         Local UDP port serving data, DEFAULT: 7355
+--TIMEOUT=<number>      Maximum seconds of silence before saving file and starting new file or exiting, DEFAULT: 5
+--MINDURATION=<number>  After timeout finishes, if total recording was less than minduration seconds, file is deleted. DEFAULT: 5
+--MAXFILES=<number>     Maximum number of files to save before exiting, DEFAULT: 5
+--DATEFMT=<string>      Date formatting: "datetime", "unix", or custom (see moment.js formatting options), default "datetime"
+--HOST=<string>         Local IP address serving data, DEFAULT: 127.0.0.1 (localhost)
+--PORT=<number>         Local UDP port serving data, DEFAULT: 7355
+-P                      Print options used and source they were chosen from (command line arguments, environment variables, default)
 ```
 #### Note:
 - Recordings are saved in the `recordings` subdirectory in the main program directory.
 - Timeout resets if a new transmission comes in before timeout finishes.
 - Silence is not recorded, and doesn't count towards `minduration`.
+- To set your own defaults (which can be overridden by passing in arguments), set environment variables prepended by `TSDR_`. Example: `--DATEFMT=unix` would be `TSDR_DATEFMT=unix`.
 
 # Todo:
 
-- Write stream to a buffer and then save that? Main reason being that in case `minduration` is specified, can avoid unnecessary write and delete
-- Different timestamp options
-- Maximum recording length option
+- Add option to choose directory to save files
+- Add maximum recording length option
 - Error handling
-- Check arguments
 - Test on other operating systems

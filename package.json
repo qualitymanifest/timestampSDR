@@ -1,6 +1,6 @@
 {
   "name": "timestampsdr",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Record timestamped SDR output via node.js",
   "main": "server.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "qualitymanifest",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.3.3",
     "gar": "^1.0.4",
     "moment": "^2.24.0",
     "wav": "^1.0.2"
