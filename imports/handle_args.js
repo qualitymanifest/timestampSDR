@@ -26,36 +26,33 @@ const isNumInvalid = (num, min, isInt) => {
 	return isNaN(num) || num < min || (isInt && !Number.isInteger(Number(num)));
 }
 
-const warnMsg = (option, message) => {
+const wasInvalid = (option, message) => {
 	console.log(red.bold(`${option.src} option provided for ${option.name} (${option.val}) is invalid: ${message}. Using default.`));
+	return true;
 }
 
 const isOptionInvalid = (option) =>{
 	const { val, name } = option;
 	if (name === "TIMEOUT" && isNumInvalid(val, 0.1)) {
-		warnMsg(option, "Must be a positive number");
-		return true;
+		return wasInvalid(option, "Must be a positive number");
 	}
 	if (name === "MINDURATION" && isNumInvalid(val, 0)) {
-		warnMsg(option, "Must be a non-negative number");
-		return true;
+		return wasInvalid(option, "Must be a non-negative number");
 	}
 	if (name === "MAXFILES" && isNumInvalid(val, 1, true)) {
-		warnMsg(option, "Must be a positive integer");
-		return true;
+		return wasInvalid(option, "Must be a positive integer");
 	}
 	if (name === "PORT" && (isNumInvalid(val, 1, true) || val > 65535)) {
-		warnMsg(option, "Must be an integer between 1 and 65535");
-		return true;
+		return wasInvalid(option, "Must be an integer between 1 and 65535");
 	}
 	return false;
 }
 
-const useArgsOrEnv = (args, env, optionKeys) => {
+const useArgsOrEnv = (args, env) => {
 	const parsedOptions = Object.assign({}, defaultOptions);
-	for (let option of optionKeys) {
+	for (let option of Object.keys(parsedOptions)) {
 		// Command line arguments take precedence over environment variables
-		// Option keys are camelcase for use in code, but uppercase in provided values
+		// Option keys are camelCase for use in code, but uppercase in provided values
 		let ucOption = option.toUpperCase();
 		let argsOption = args[ucOption]
 		let envOption = env[`TSDR_${ucOption}`]
@@ -83,8 +80,7 @@ const printOptions = (finalOptions) => Object.keys(finalOptions).map((key) => {
 const handleArgs = () => {
 	const args = gar(process.argv.slice(2));
 	const env = process.env;
-	const optionKeys = ["timeout", "minDuration", "maxFiles", "dateFmt", "host", "port"];
-	const finalOptions = useArgsOrEnv(args, env, optionKeys);
+	const finalOptions = useArgsOrEnv(args, env);
 	if (args["P"]) {
 		printOptions(finalOptions);
 	}
