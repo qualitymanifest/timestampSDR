@@ -1,11 +1,11 @@
 const fs = require("fs");
 const dgram = require("dgram");
 const { green, yellow } = require("colors/safe");
-const handleArgs = require("./imports/handle_args");
+const handleOptions = require("./imports/handle_options");
 const createFile = require("./imports/create_file");
 
 const server = dgram.createSocket("udp4");
-const args = handleArgs();
+const options = handleOptions();
 let currFileNum = 1;
 let timeoutID;
 let file;
@@ -13,7 +13,7 @@ let file;
 const startTimeout = () => {
 	file.timeoutRunning = true;
 	file.millisElapsed += Date.now() - file.recordStartTime;
-	timeoutID = setTimeout(handleTimeout, args.timeout);
+	timeoutID = setTimeout(handleTimeout, options.timeout);
 }
 
 const cancelTimeout = () => {
@@ -25,14 +25,14 @@ const cancelTimeout = () => {
 const handleTimeout = () => {
 	file.writer.end(() => {
 		const secondsElapsedTotal = file.millisElapsed / 1000;
-		if (args.minDuration && secondsElapsedTotal < args.minDuration) {
-			console.log(yellow(`   -- Recording time shorter than MINDURATION (${secondsElapsedTotal}/${args.minDuration}s), deleting`));
+		if (options.minDuration && secondsElapsedTotal < options.minDuration) {
+			console.log(yellow(`   -- Recording time shorter than MINDURATION (${secondsElapsedTotal}/${options.minDuration}s), deleting`));
 			fs.unlink(file.name, err => {
 			});
 		}
 		else {
-			console.log(green(`   ++ Recording #${currFileNum} saved`));
-			if (currFileNum < args.maxFiles) {
+			console.log(green(`   ++ Recording #${currFileNum} saved (${secondsElapsedTotal}s)`));
+			if (currFileNum < options.maxFiles) {
 				currFileNum++;
 			}
 			else {
@@ -54,7 +54,7 @@ server.on('message', (message, remote) => {
     const readableMessage = message.readInt16LE();
     if (readableMessage !== 0) {
     	if (!file) {
-    		file = createFile(args.dateFmt, args.maxFiles, currFileNum);
+    		file = createFile(options.dateFmt, options.maxFiles, currFileNum);
     	}
     	else if (file.timeoutRunning) {
     		cancelTimeout();
@@ -68,4 +68,4 @@ server.on('message', (message, remote) => {
 });
 
 
-server.bind(args.port, args.host);
+server.bind(options.port, options.host);

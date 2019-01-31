@@ -1,6 +1,12 @@
+### v2.0.0
+- Switched from environment variables to config file - faster and easier to edit.
+- Added pre-commit hook to check if config.js was changed
+- Using camelCase everywhere (code, args, and config) - no case conversion needed.
+- changed `handle_args.js` to `handle_options.js`
+
 ### v1.0.0
 - Added support for environment variables
-- Changed argument names to uppercase for consistency (camelcase in code, uppercase in args/env)
+- Changed argument names to uppercase for consistency (camelCase in code, uppercase in args/env)
 - Added date formatting options
 - Validation for options passed in
 - Added option to print options used and their source (args, env, default)
