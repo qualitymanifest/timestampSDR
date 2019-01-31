@@ -1,6 +1,10 @@
+###v2.1.0
+- Added pre-commit hook to check if `config.js` was changed
+- Added npm script to move pre-commit hook to hooks directory
+- Created `CONTRIBUTING.md`
+
 ### v2.0.0
 - Switched from environment variables to config file - faster and easier to edit.
-- Added pre-commit hook to check if config.js was changed
 - Using camelCase everywhere (code, args, and config) - no case conversion needed.
 - changed `handle_args.js` to `handle_options.js`
 

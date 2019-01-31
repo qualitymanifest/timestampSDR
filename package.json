@@ -1,10 +1,11 @@
 {
   "name": "timestampsdr",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Record timestamped SDR output via node.js",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "init-dev": "sh dev/init-dev.sh"
   },
   "author": "qualitymanifest",
   "license": "ISC",

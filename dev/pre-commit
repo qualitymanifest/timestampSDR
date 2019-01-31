@@ -1,0 +1,14 @@
+##!/bin/sh
+
+FILES="config.js"
+
+if [ "`git diff-index --cached HEAD | grep \"$FILES\"`" ]; then
+
+  exec < /dev/tty
+
+  echo "You are attempting to commit changes to config.js. If you are sure, try again with --no-verify"
+  echo "ABORTING COMMIT"
+  
+  exit 1;
+
+fi
