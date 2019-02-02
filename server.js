@@ -1,6 +1,6 @@
 const fs = require("fs");
 const dgram = require("dgram");
-const { green, yellow } = require("colors/safe");
+const { green, yellow, red } = require("colors/safe");
 const handleOptions = require("./imports/handle_options");
 const createFile = require("./imports/create_file");
 
@@ -26,9 +26,8 @@ const handleTimeout = () => {
 	file.writer.end(() => {
 		const secondsElapsedTotal = file.millisElapsed / 1000;
 		if (options.minDuration && secondsElapsedTotal < options.minDuration) {
-			console.log(yellow(`   -- Recording time shorter than MINDURATION (${secondsElapsedTotal}/${options.minDuration}s), deleting`));
-			fs.unlink(file.name, err => {
-			});
+			console.log(yellow(`   -- Recording time shorter than minDuration (${secondsElapsedTotal}/${options.minDuration}s), deleting`));
+			fs.unlink(file.name, err => err ? console.log(red("ERROR DELETING FILE: ", err)) : null);
 		}
 		else {
 			console.log(green(`   ++ Recording #${currFileNum} saved (${secondsElapsedTotal}s)`));
@@ -45,27 +44,35 @@ const handleTimeout = () => {
 	});
 }
 
-server.on('listening', () => {
+server.on("listening", () => {
     const address = server.address();
     console.log(`UDP Server listening on ${address.address}:${address.port}`);
 });
 
-server.on('message', (message, remote) => {
-    const readableMessage = message.readInt16LE();
-    if (readableMessage !== 0) {
-    	if (!file) {
-    		file = createFile(options.dateFmt, options.maxFiles, currFileNum);
-    	}
-    	else if (file.timeoutRunning) {
-    		cancelTimeout();
-    	}
-    	file.writer.write(message);
-    }
-    // Make sure file exists, and don't start multiple timeouts
-    else if (file && !file.timeoutRunning) {
-    	startTimeout();
-    }
+server.on("message", (message, remoteInfo) => {
+	/* If remoteInfo.size is 0 or 1, this causes an error with message.readInt16LE(). Three of these come in when:
+	 * - GQRX is opened after timestampSDR is already running
+	 * - GQRX is closed, or the stream is stopped manually while timestampSDR is running
+	 */
+	if (remoteInfo.size > 1) {
+		// Check if message contains data
+		if (message.readInt16LE() !== 0) {
+			if (!file) {
+				file = createFile(options.dateFmt, options.maxFiles, currFileNum);
+			}
+			else if (file.timeoutRunning) {
+				cancelTimeout();
+			}
+			file.writer.write(message);
+		}
+		// Message was empty
+		// Only start timeout if there is an active file and there isn't a timeout running already
+		else if (file && !file.timeoutRunning) {
+			startTimeout();
+		}
+	}
 });
+
 
 
 server.bind(options.port, options.host);

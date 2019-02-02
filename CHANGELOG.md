@@ -1,4 +1,7 @@
-###v2.1.0
+### v2.1.1
+- Added condition checking `remoteInfo.size` in UDP stream listener to prevent errors with `readInt16LE()`
+
+### v2.1.0
 - Added pre-commit hook to check if `config.js` was changed
 - Added npm script to move pre-commit hook to hooks directory
 - Created `CONTRIBUTING.md`
@@ -6,7 +9,7 @@
 ### v2.0.0
 - Switched from environment variables to config file - faster and easier to edit.
 - Using camelCase everywhere (code, args, and config) - no case conversion needed.
-- changed `handle_args.js` to `handle_options.js`
+- Changed `handle_args.js` to `handle_options.js`
 
 ### v1.0.0
 - Added support for environment variables

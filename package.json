@@ -1,7 +1,8 @@
 {
-  "name": "timestampsdr",
-  "version": "2.1.0",
+  "name": "timestampSDR",
+  "version": "2.1.1",
   "description": "Record timestamped SDR output via node.js",
+  "repository": "https://github.com/qualitymanifest/timestampSDR",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
