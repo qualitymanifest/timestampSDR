@@ -1,3 +1,7 @@
+### v2.1.2
+- Changed default date formatting to be compatible with Windows and MacOS
+- Tested on Windows successfully
+
 ### v2.1.1
 - Added condition checking `remoteInfo.size` in UDP stream listener to prevent errors with `readInt16LE()`
 

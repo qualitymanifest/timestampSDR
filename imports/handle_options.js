@@ -14,7 +14,8 @@ const defaultOptions = {
 
 const dateFmtOptions = (dateFmt) => {
 	if (dateFmt === "datetime") {
-		return "MMM-DD-YYYY_HH:mm:ss"
+		// Although colons would be preferable for time delimiters, Windows and MacOS do not allow them
+		return "MMM-DD-YYYY_HH-mm-ss";
 	}
 	if (dateFmt === "unix") {
 		return "x";
