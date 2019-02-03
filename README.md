@@ -12,7 +12,9 @@ timestampSDR is designed to take the UDP stream output from GQRX and record tran
 - Clone this repo or download it and extract the zip file.
 - Navigate to the program directory and run `npm install` to install the program dependencies.
 - GQRX must be running, with the `UDP` button selected in the audio panel.
-- GQRX network options (found under the `...` button in the audio panel) must match the host and port specified below. If below options are omitted, the default options should work with the default GQRX host and port.
+- GQRX network options (found under the `...` button in the audio panel) must match the `host` and `port` specified below. If below options are omitted:
+	- **Linux** default settings should work automatically
+	- **Windows and MacOS** users may have to manually change the host network value on GQRX from `localhost` to `127.0.0.1`
 - Make sure your squelch is adjusted well. As far as I can tell, there is no way to distinguish static from meaningful transmissions, so static is recorded.
 
 # Usage:
