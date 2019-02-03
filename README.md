@@ -2,13 +2,13 @@
 
 timestampSDR is designed to take the UDP stream output from GQRX and record transmissions to time-stamped `.wav` files. There are several configuration options, described below, that allow you to keep only the transmissions you want. This can allow you to quickly review transmissions that occurred over a long period of time.
 
-:heavy_check_mark: Works on Linux
-:heavy_check_mark: Works on Windows 10 running GQRX via [pothosSDR](https://github.com/pothosware/PothosSDR/wiki/Tutorial)
-:grey_question: Should work on MacOS, but not tested (seeking feedback!)
+- :heavy_check_mark: Works on Linux
+- :heavy_check_mark: Works on Windows 10 running GQRX via [pothosSDR](https://github.com/pothosware/PothosSDR/wiki/Tutorial)
+- :grey_question: Should work on MacOS, but not tested (seeking feedback!)
 
 # Getting started:
 
-- Must have node.js installed.
+- Must have GQRX and node.js installed.
 - Clone this repo or download it and extract the zip file.
 - Navigate to the program directory and run `npm install` to install the program dependencies.
 - GQRX must be running, with the `UDP` button selected in the audio panel.
