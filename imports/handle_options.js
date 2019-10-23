@@ -1,6 +1,5 @@
 const gar = require("gar");
-const moment = require("moment");
-const red = require("colors/safe").red;
+const { red } = require("colors/safe");
 const config = require("../config.js");
 
 const defaultOptions = {

@@ -26,11 +26,11 @@ const handleTimeout = () => {
 	file.writer.end(() => {
 		const secondsElapsedTotal = file.millisElapsed / 1000;
 		if (options.minDuration && secondsElapsedTotal < options.minDuration) {
-			console.log(yellow(`   -- Recording time shorter than minDuration (${secondsElapsedTotal}/${options.minDuration}s), deleting`));
+			console.log(yellow(`-- Recording time shorter than minDuration (${secondsElapsedTotal}/${options.minDuration}s), deleting`));
 			fs.unlink(file.name, err => { if (err) throw err });
 		}
 		else {
-			console.log(green(`   ++ Recording #${currFileNum} saved (${secondsElapsedTotal}s)`));
+			console.log(green(`++ Recording #${currFileNum} saved (${secondsElapsedTotal}s)`));
 			if (currFileNum < options.maxFiles) {
 				currFileNum++;
 			}

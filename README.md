@@ -9,7 +9,7 @@ timestampSDR is designed to take the UDP stream output from certain SDR receiver
 # Getting started:
 
 - Must have node.js installed.
-- Clone this repo or download it and extract the zip file.
+- Clone this repo, or download it and extract the zip file.
 - Navigate to the program directory and run `npm install` to install the program dependencies.
 - Refer to [the wiki](https://github.com/qualitymanifest/timestampSDR/wiki) for instructions on setting up your SDR receiver software. Currently this includes GQRX and rtl_fm. GQRX is more user-friendly and seems to provide better audio, rtl_fm runs efficiently on low-spec devices.
 - Regardless of your receiver software, make sure your squelch is adjusted well. timestampSDR cannot differentiate static from meaningful transmissions.
@@ -30,4 +30,4 @@ node main.js [options]
 - Recordings are saved in the `recordings` subdirectory in the main program directory.
 - Timeout resets if a new transmission comes in before timeout finishes.
 - Silence is not recorded, and doesn't count towards `minDuration`.
-- To set your own default options (which can be overridden by passing in arguments), go to `config.js` in the main program directory and follow the instructions provided in the file.
+- To set your own default options (which can be overridden by passing in arguments), you can modify `config.js`.
