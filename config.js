@@ -10,6 +10,7 @@ const config = {
 //	minDuration: 5,          
 //	maxFiles:    5,          
 //	dateFmt:     "datetime", 
+//  sampleRate:  48000,
 //	host:        "127.0.0.1",
 //	port:        7355,       
 }
