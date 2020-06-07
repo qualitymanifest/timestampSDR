@@ -3,9 +3,9 @@
   "version": "2.1.2",
   "description": "Record timestamped SDR output via node.js",
   "repository": "https://github.com/qualitymanifest/timestampSDR",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node main.js",
     "init-dev": "sh dev/init-dev.sh"
   },
   "author": "qualitymanifest",
