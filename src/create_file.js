@@ -4,7 +4,7 @@ const moment = require("moment");
 
 const createFile = (options, currFileNum) => {
 	const { dateFmt, maxFiles, sampleRate } = options;
-	const fileName = join("recordings", `${moment().format(dateFmt)}.wav`);
+	const fileName = join("recordings", `${moment().format(dateFmt)}.wav.temp`);
 	console.log(`* Starting recording #${currFileNum}/${maxFiles}, filename: ${fileName}`);
 	return {
 		timeoutRunning: false,

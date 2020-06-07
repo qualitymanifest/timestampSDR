@@ -30,6 +30,10 @@ const handleTimeout = () => {
 			fs.unlink(file.name, err => { if (err) throw err });
 		}
 		else {
+			const permanentFileName = file.name.replace(".temp", "");
+			fs.rename(file.name, permanentFileName, (err) => {
+				if (err) console.log(`Error encountered while attempting to remove .temp label from file ${file.name}`.red.bold, err);
+			});
 			console.log(`++ Recording #${currFileNum} saved (${secondsElapsedTotal}s)`.green);
 			if (currFileNum < options.maxFiles) {
 				currFileNum++;
