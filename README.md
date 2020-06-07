@@ -22,6 +22,7 @@ node main.js [options]
 --minDuration | After timeout, if recording was less than <minDuration> seconds, file is deleted     | DEFAULT: 5
 --maxFiles    | Number of files to save before exiting program                                       | DEFAULT: 5
 --dateFmt     | Date formatting: "datetime", "unix", or custom moment.js format                      | DEFAULT: "datetime"
+--sampleRate  | Input sample rate in Hz                                                              | DEFAULT: 48000
 --host        | Local IP address serving data                                                        | DEFAULT: "127.0.0.1"
 --port        | Local UDP port serving data                                                          | DEFAULT: 7355
 -p            | Print options used and source they were chosen from (CLI, config file, default)      |

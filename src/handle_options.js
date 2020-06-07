@@ -7,6 +7,7 @@ const defaultOptions = {
 	minDuration: {val: 5,           src: "DEFAULT"},
 	maxFiles:    {val: 5,           src: "DEFAULT"},
 	dateFmt:     {val: "datetime",  src: "DEFAULT"},
+	sampleRate:  {val: 48000,       src: "DEFAULT"},
 	host:        {val: "127.0.0.1", src: "DEFAULT"},
 	port:        {val: 7355,        src: "DEFAULT"},
 };
