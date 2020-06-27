@@ -21,15 +21,15 @@ timestampSDR is designed to take the UDP stream output from certain SDR receiver
 
 | Option | Description | Default |
 | :-- | :-- | :-- |
---timeout     | After transmission, wait <timeout> seconds before saving/deleting file and moving on | DEFAULT: 5
---minDuration | After timeout, if recording was less than <minDuration> seconds, file is deleted     | DEFAULT: 5
---maxFiles    | Number of files to save before exiting program                                       | DEFAULT: 5
---dateFmt     | Date formatting: "datetime", "unix", or custom moment.js format                      | DEFAULT: "datetime"
---sampleRate  | Sample rate in Hz                                                                    | DEFAULT: 48000
---channels    | 1 for mono, 2 for stereo, etc                                                        | DEFAULT: 1
---bitDepth    | Bits per sample                                                                      | DEFAULT: 16
---host        | Local IP address serving data                                                        | DEFAULT: "127.0.0.1"
---port        | Local UDP port serving data                                                          | DEFAULT: 7355
+--timeout     | After transmission, wait <timeout> seconds before saving/deleting file and moving on | 5
+--minDuration | After timeout, if recording was less than <minDuration> seconds, file is deleted     | 5
+--maxFiles    | Number of files to save before exiting program                                       | 5
+--dateFmt     | Date formatting: "datetime", "unix", or custom moment.js format                      | "datetime"
+--sampleRate  | Sample rate in Hz                                                                    | 48000
+--channels    | 1 for mono, 2 for stereo, etc                                                        | 1
+--bitDepth    | Bits per sample                                                                      | 16
+--host        | Local IP address serving data                                                        | "127.0.0.1"
+--port        | Local UDP port serving data                                                          | 7355
 -p            | Print options used and source they were chosen from (CLI, config file, default)      |
 
 #### Note:
