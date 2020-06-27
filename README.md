@@ -16,8 +16,11 @@ timestampSDR is designed to take the UDP stream output from certain SDR receiver
 
 ## Usage:
 
-```
-node main.js [options]
+
+`node main.js [options]`
+
+| Option | Description | Default |
+| :-- | :-- | :-- |
 --timeout     | After transmission, wait <timeout> seconds before saving/deleting file and moving on | DEFAULT: 5
 --minDuration | After timeout, if recording was less than <minDuration> seconds, file is deleted     | DEFAULT: 5
 --maxFiles    | Number of files to save before exiting program                                       | DEFAULT: 5
@@ -28,7 +31,6 @@ node main.js [options]
 --host        | Local IP address serving data                                                        | DEFAULT: "127.0.0.1"
 --port        | Local UDP port serving data                                                          | DEFAULT: 7355
 -p            | Print options used and source they were chosen from (CLI, config file, default)      |
-```
 
 #### Note:
 
