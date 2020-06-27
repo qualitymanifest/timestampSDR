@@ -8,6 +8,8 @@ const defaultOptions = {
 	maxFiles:    {val: 5,           src: "DEFAULT"},
 	dateFmt:     {val: "datetime",  src: "DEFAULT"},
 	sampleRate:  {val: 48000,       src: "DEFAULT"},
+	channels:    {val: 1,           src: "DEFAULT"},
+	bitDepth:    {val: 16,          src: "DEFAULT"},
 	host:        {val: "127.0.0.1", src: "DEFAULT"},
 	port:        {val: 7355,        src: "DEFAULT"},
 };
@@ -49,8 +51,14 @@ const isOptionInvalid = (option, key) =>{
 	if (key === "port" && isNumInvalid({ num: val, min: 1, max: 65535, isInt: true })) {
 		return wasInvalid(option, key, "Must be an integer between 1 and 65535");
 	}
-	if (key === "sampleRate" && isNumInvalid({ num: val, min: 0, isInt: true, })) { // Not sure what all the valid wav sample rates are
-		return wasInvalid(option, key, "Must be a positive integer");
+	if (key === "sampleRate" && isNumInvalid({ num: val, min: 1, max: 4_300_000_000, isInt: true, })) {
+		return wasInvalid(option, key, "Must be an integer between 1 and 4300000000");
+	}
+	if (key === "channels" && isNumInvalid({ num: val, min: 1, max: 65535, isInt: true })) {
+		return wasInvalid(option, key, "Must be an integer between 1 and 65535");
+	}
+	if (key === "bitDepth" && isNumInvalid({ num: val, min: 4, max: 32, isInt: true })) {
+		return wasInvalid(option, key, "Must be an integer between 4 and 32");
 	}
 	return false;
 }
@@ -88,18 +96,13 @@ const handleOptions = () => {
 	if (args.p) {
 		printOptions(finalOptions);
 	}
-	const { timeout, minDuration, maxFiles, dateFmt, sampleRate, host, port } = finalOptions;
-	return {
-		// timeout specified in seconds, convert to milliseconds
-		// minDuration should be kept as seconds for printing when file is too short
-		timeout: timeout.val * 1000,
-		minDuration: minDuration.val,
-		maxFiles: maxFiles.val,
-		dateFmt: dateFmtOptions(dateFmt.val),
-		sampleRate: sampleRate.val,
-		host: host.val,
-		port: port.val
-	}
+	// Only needed option.src for printing purposes, so each option should just contain it's value now
+	Object.keys(finalOptions).map(key => finalOptions[key] = finalOptions[key].val);
+	// timeout specified in seconds, convert to milliseconds
+	// minDuration should be kept as seconds for printing when file is too short
+	finalOptions.timeout *= 1000;
+	finalOptions.dateFmt = dateFmtOptions(finalOptions.dateFmt)
+	return finalOptions;
 }
 
 module.exports = handleOptions;
