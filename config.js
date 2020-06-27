@@ -11,6 +11,8 @@ const config = {
 //	maxFiles:    5,          
 //	dateFmt:     "datetime", 
 //  sampleRate:  48000,
+//  channels:    1,
+//  bitDepth:    16,
 //	host:        "127.0.0.1",
 //	port:        7355,       
 }
