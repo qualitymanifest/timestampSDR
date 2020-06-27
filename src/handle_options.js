@@ -50,7 +50,7 @@ const isOptionInvalid = (option, key) =>{
 }
 
 const useArgsOrConfig = (args) => {
-	const parsedOptions = Object.assign({}, defaultOptions);
+	const parsedOptions = { ...defaultOptions };
 	for (let key of Object.keys(parsedOptions)) {
 		// Command line arguments take precedence over config variables
 		const argsOption = args[key]
@@ -82,7 +82,7 @@ const handleOptions = () => {
 	if (args.p) {
 		printOptions(finalOptions);
 	}
-	const { timeout, minDuration, maxFiles, dateFmt, host, port } = finalOptions;
+	const { timeout, minDuration, maxFiles, dateFmt, sampleRate, host, port } = finalOptions;
 	return {
 		// timeout specified in seconds, convert to milliseconds
 		// minDuration should be kept as seconds for printing when file is too short
@@ -90,6 +90,7 @@ const handleOptions = () => {
 		minDuration: minDuration.val,
 		maxFiles: maxFiles.val,
 		dateFmt: dateFmtOptions(dateFmt.val),
+		sampleRate: sampleRate.val,
 		host: host.val,
 		port: port.val
 	}
