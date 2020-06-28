@@ -51,7 +51,7 @@ const isOptionInvalid = (option, key) =>{
 	if (key === "port" && isNumInvalid({ num: val, min: 1, max: 65535, isInt: true })) {
 		return wasInvalid(option, key, "Must be an integer between 1 and 65535");
 	}
-	if (key === "sampleRate" && isNumInvalid({ num: val, min: 1, max: 4_300_000_000, isInt: true, })) {
+	if (key === "sampleRate" && isNumInvalid({ num: val, min: 1, max: 4300000000, isInt: true, })) {
 		return wasInvalid(option, key, "Must be an integer between 1 and 4300000000");
 	}
 	if (key === "channels" && isNumInvalid({ num: val, min: 1, max: 65535, isInt: true })) {
